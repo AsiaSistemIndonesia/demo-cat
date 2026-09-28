@@ -14,7 +14,7 @@ export function BrandMark({ className }: { className?: string }) {
         src="/assets/img/company_logo.png"
         alt="Company Logo"
         fill
-        className="bg-transparent object-contain"
+        className="object-contain"
       />
     </div>
   );
@@ -31,9 +31,7 @@ export function BrandLogo({
 }) {
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      <BrandMark
-        className={cn(inverted && "bg-primary-foreground text-primary")}
-      />
+      <BrandMark className={cn(inverted)} />
       <div className="flex flex-col leading-tight">
         <span
           className={cn(

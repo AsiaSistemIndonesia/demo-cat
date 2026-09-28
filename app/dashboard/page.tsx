@@ -1,9 +1,9 @@
-import type { Metadata } from 'next'
-import { AppHeader } from '@/components/app-header'
-import { ExamList } from '@/components/dashboard/exam-list'
-import { exams, participant } from '@/lib/mock-data'
+import type { Metadata } from "next";
+import { AppHeader } from "@/components/app-header";
+import { ExamList } from "@/components/dashboard/exam-list";
+import { exams, participant } from "@/lib/mock-data";
 
-export const metadata: Metadata = { title: 'Daftar Ujian — CAT SIM JF' }
+export const metadata: Metadata = { title: "Daftar Ujian — CAT SIM JF" };
 
 export default function DashboardPage() {
   return (
@@ -19,14 +19,14 @@ export default function DashboardPage() {
               Pilih ujian yang tersedia untuk Anda
             </p>
           </div>
-          <dl className="flex flex-col gap-0.5 text-sm md:items-end">
+          {/* <dl className="flex flex-col gap-0.5 text-sm md:items-end">
             <dt className="text-xs text-muted-foreground">Nomor Peserta</dt>
             <dd className="font-mono font-semibold">{participant.id}</dd>
-          </dl>
+          </dl> */}
         </div>
 
         <ExamList exams={exams} />
       </main>
     </div>
-  )
+  );
 }
