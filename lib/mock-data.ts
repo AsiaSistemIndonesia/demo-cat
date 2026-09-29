@@ -6,8 +6,14 @@ export type Participant = {
   id: string;
   name: string;
   username: string;
+  email?: string;
+  password?: string;
   nip: string;
   institution: string;
+  tempatLahir?: string;
+  tglLahir?: string | Date | null;
+  tmt?: string | Date | null;
+  noHp?: string;
 };
 
 export type ExamMaterial = { code: Category; name: string; count: number };
@@ -50,13 +56,7 @@ export type ExamResult = {
   categoryScores: { code: Category; score: number; max: number }[];
 };
 
-export const participant: Participant = {
-  id: "PST-2026-00417",
-  name: "Saeful Bahri Assegaf",
-  username: "saeful.bahri",
-  nip: "199201132022031009",
-  institution: "Badan Intelijen Negara",
-};
+
 
 const standardMaterials: ExamMaterial[] = [
   { code: "TWK", name: "Tes Wawasan Kebangsaan", count: 20 },

@@ -3,7 +3,7 @@ import { LogOut, Menu } from "lucide-react";
 import { BrandLogo } from "@/components/brand-logo";
 import { LiveClock } from "@/components/live-clock";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { participant } from "@/lib/mock-data";
+import { type Participant } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 
 function initials(name: string) {
@@ -15,7 +15,7 @@ function initials(name: string) {
     .join("");
 }
 
-export function AppHeader() {
+export function AppHeader({ participant }: { participant: Participant }) {
   return (
     <header className="sticky top-0 z-30 border-b bg-card">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 md:px-6">

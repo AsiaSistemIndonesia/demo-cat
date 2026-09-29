@@ -2,101 +2,125 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Lock, LogIn, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { User, Eye, EyeOff } from "lucide-react";
 
 export function LoginForm() {
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const domain_name = "example.com";
+
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitting(true);
-    // Mockup: tanpa autentikasi nyata, langsung ke dashboard.
-    router.push("/dashboard");
+    setErrorMsg("");
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        router.push("/dashboard");
+      } else {
+        setErrorMsg(data.error || "Email atau password salah!");
+        setIsLoading(false);
+      }
+    } catch (err) {
+      setErrorMsg("Terjadi kesalahan server.");
+      setIsLoading(false);
+    }
   }
 
   return (
-    <div className="w-full rounded-2xl border bg-card p-6 shadow-lg shadow-primary/10 md:p-8">
-      <div className="mb-6 flex flex-col gap-1">
-        <h2 className="text-lg font-bold text-foreground">Masuk Peserta</h2>
-        <p className="text-sm leading-relaxed text-muted-foreground">
-          Silakan login untuk mengakses ujian
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="username">Username</Label>
-          <div className="relative">
-            <User
-              aria-hidden="true"
-              className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+    <>
+      <h2 className="text-xl font-regulard mb-6 text-center text-white">
+        Masuk ke akun anda
+      </h2>
+      {errorMsg && (
+        <div className="mb-4 p-3 bg-red-500/20 border border-red-500 rounded text-red-100 text-sm text-center">
+          {errorMsg}
+        </div>
+      )}
+      <form onSubmit={handleLogin}>
+        <div className="mb-4">
+          <label
+            className="block text-white text-sm font-bold mb-2"
+            htmlFor="email"
+          >
+            Email
+          </label>
+          <div className="flex items-center">
+            <input
+              className="shadow appearance-none border rounded-l w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
+              id="email"
+              type="email"
+              placeholder={`Email (ex. username@${domain_name})`}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            <Input
-              id="username"
-              name="username"
-              autoComplete="username"
-              placeholder="Masukkan username"
-              // defaultValue="brigita01"
-              className="h-11 pl-9"
-            />
+            <div className="bg-[rgb(52,108,155)] rounded-md p-3 flex items-center pointer-events-none">
+              <User className="text-white size-5" />
+            </div>
           </div>
         </div>
-
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="password">Password</Label>
-          <div className="relative">
-            <Lock
-              aria-hidden="true"
-              className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
-            />
-            <Input
+        <div className="mb-6">
+          <label
+            className="block text-white text-sm font-bold mb-2"
+            htmlFor="password"
+          >
+            Kata Sandi
+          </label>
+          <div className="flex items-center">
+            <input
+              className="shadow appearance-none border rounded-l w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
               id="password"
-              name="password"
               type={showPassword ? "text" : "password"}
-              autoComplete="current-password"
-              placeholder="Masukkan password"
-              // defaultValue="demo12345"
-              className="h-11 px-9"
+              placeholder="Kata Sandi"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword((v) => !v)}
-              aria-label={
-                showPassword ? "Sembunyikan password" : "Tampilkan password"
-              }
-              className="absolute top-1/2 right-2 flex size-7 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
+            <div
+              className="bg-[rgb(52,108,155)] rounded-md p-3 flex items-center cursor-pointer"
+              onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? (
-                <EyeOff className="size-4" />
+                <Eye className="text-white size-5" />
               ) : (
-                <Eye className="size-4" />
+                <EyeOff className="text-white size-5" />
               )}
-            </button>
+            </div>
+          </div>
+          <div className="text-left mt-3">
+            <a
+              href="/forgot-password"
+              className="text-[rgb(52,108,155)] hover:underline"
+            >
+              Lupa Kata Sandi?
+            </a>
           </div>
         </div>
-
-        <Button
-          type="submit"
-          size="lg"
-          className="h-11 text-sm"
-          disabled={submitting}
-        >
-          <LogIn />
-          {submitting ? "Memproses…" : "Login"}
-        </Button>
+        <div className="flex items-center justify-between pt-4">
+          <button
+            className={`w-full bg-[rgb(52,108,155)] hover:bg-[rgb(42,98,145)] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${
+              isLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            type="submit"
+            disabled={isLoading}
+          >
+            {isLoading ? "Memuat..." : "Masuk"}
+          </button>
+        </div>
       </form>
-
-      <div className="mt-6 flex items-center justify-between border-t pt-4 text-xs text-muted-foreground">
-        <span>Gunakan akun dari panitia seleksi</span>
-        <a href="#" className="font-semibold text-brand-bright hover:underline">
-          Butuh bantuan?
-        </a>
-      </div>
-    </div>
+    </>
   );
 }

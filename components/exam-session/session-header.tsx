@@ -1,8 +1,8 @@
-import { Timer } from 'lucide-react'
-import { BrandMark } from '@/components/brand-logo'
-import { Progress } from '@/components/ui/progress'
-import { formatCountdown } from '@/lib/exam-engine'
-import { cn } from '@/lib/utils'
+import { Timer } from "lucide-react";
+import { BrandMark } from "@/components/brand-logo";
+import { Progress } from "@/components/ui/progress";
+import { formatCountdown } from "@/lib/exam-engine";
+import { cn } from "@/lib/utils";
 
 export function SessionHeader({
   title,
@@ -11,22 +11,24 @@ export function SessionHeader({
   answered,
   total,
 }: {
-  title: string
-  participantName: string
-  remainingSeconds: number
-  answered: number
-  total: number
+  title: string;
+  participantName: string;
+  remainingSeconds: number;
+  answered: number;
+  total: number;
 }) {
-  const critical = remainingSeconds <= 5 * 60
+  const critical = remainingSeconds <= 5 * 60;
 
   return (
     <header className="sticky top-0 z-30 bg-primary text-primary-foreground">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-3 md:px-6">
         <div className="flex min-w-0 items-center gap-3">
-          <BrandMark className="bg-primary-foreground text-primary" />
+          <BrandMark className="text-primary" />
           <div className="flex min-w-0 flex-col leading-tight">
             <span className="truncate text-base font-bold">{title}</span>
-            <span className="truncate text-xs text-primary-foreground/70">{participantName}</span>
+            <span className="truncate text-xs text-primary-foreground/70">
+              {participantName}
+            </span>
           </div>
         </div>
 
@@ -50,10 +52,10 @@ export function SessionHeader({
             aria-live="off"
             aria-label="Sisa waktu ujian"
             className={cn(
-              'flex items-center gap-3 rounded-lg px-4 py-2',
+              "flex items-center gap-3 rounded-lg px-4 py-2",
               critical
-                ? 'bg-destructive text-primary-foreground'
-                : 'bg-primary-foreground text-primary',
+                ? "bg-destructive text-primary-foreground"
+                : "bg-primary-foreground text-primary",
             )}
           >
             <Timer className="size-5" aria-hidden="true" />
@@ -69,5 +71,5 @@ export function SessionHeader({
         </div>
       </div>
     </header>
-  )
+  );
 }

@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 import { AppHeader } from "@/components/app-header";
 import { ExamList } from "@/components/dashboard/exam-list";
-import { exams, participant } from "@/lib/mock-data";
+import { exams } from "@/lib/mock-data";
+import { getParticipant } from "@/lib/session";
 
 export const metadata: Metadata = { title: "Daftar Ujian — CAT SIM JF" };
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const participant = await getParticipant();
   return (
     <div className="min-h-dvh">
-      <AppHeader />
+      <AppHeader participant={participant} />
       <main className="mx-auto flex max-w-4xl flex-col gap-8 px-4 py-10 md:px-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="flex flex-col gap-1">

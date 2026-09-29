@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation'
 import { AppHeader } from '@/components/app-header'
 import { ResultView } from '@/components/result/result-view'
-import { getExam, participant } from '@/lib/mock-data'
+import { getExam } from '@/lib/mock-data'
+import { getParticipant } from "@/lib/session";
 
 export async function generateMetadata({ params }: PageProps<'/ujian/[slug]/result'>) {
   const { slug } = await params
@@ -13,9 +14,10 @@ export default async function ResultPage({ params }: PageProps<'/ujian/[slug]/re
   const exam = getExam(slug)
   if (!exam) notFound()
 
+  const participant = await getParticipant()
   return (
     <div className="min-h-dvh">
-      <AppHeader />
+      <AppHeader participant={participant} />
       <ResultView exam={exam} participantName={participant.name} />
     </div>
   )

@@ -1,31 +1,50 @@
 import type { Metadata } from "next";
-import { BrandMark } from "@/components/brand-logo";
 import { LoginForm } from "@/components/login-form";
 
 export const metadata: Metadata = { title: "Login — CAT SIM JF" };
 
+const AuthLayout = ({
+  children,
+  logo,
+}: {
+  children: React.ReactNode;
+  logo?: string;
+}) => {
+  return (
+    <div className="relative min-h-screen w-full overflow-visible">
+      {/* Full-screen background image (stretched) */}
+      <img
+        src="/assets/img/BG_Portal_New.png"
+        alt="Background"
+        className="fixed inset-0 w-full h-full object-cover z-0"
+      />
+
+      {/* Optional dark overlay for readability */}
+      <div className="fixed inset-0 bg-black/50 z-0" />
+
+      {/* Outer wrapper with vertical padding */}
+      <div className="relative z-20 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        {/* Form container with dynamic height */}
+        <div className="w-full max-w-md bg-gray-400/20 backdrop-blur-sm rounded-xl shadow-lg p-8 my-8">
+          {/* Logo */}
+          {logo && (
+            <div className="flex justify-center mb-8">
+              <img src={logo} alt="Logo" className="h-24" />
+            </div>
+          )}
+
+          {/* Children content */}
+          <div className="space-y-6">{children}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function LoginPage() {
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-center bg-primary px-4 py-12">
-      <div className="flex w-full max-w-md flex-col items-center gap-6">
-        <div className="flex flex-col items-center gap-3 text-center text-primary-foreground">
-          <BrandMark className="size-16 text-xl text-primary" />
-          <div className="flex flex-col gap-1">
-            <h1 className="text-2xl font-extrabold tracking-tight">
-              CAT SIM JF
-            </h1>
-            <p className="text-sm text-primary-foreground/75">
-              Computer Assisted Test — Sistem Informasi Jabatan Fungsional
-            </p>
-          </div>
-        </div>
-
-        <LoginForm />
-
-        <p className="text-center text-xs text-primary-foreground/70">
-          {"© 2026 CAT SIM JF. Sistem ini hanya untuk peserta terdaftar."}
-        </p>
-      </div>
-    </main>
+    <AuthLayout logo="/assets/img/company_logo.png">
+      <LoginForm />
+    </AuthLayout>
   );
 }
